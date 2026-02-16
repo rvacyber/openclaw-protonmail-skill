@@ -1,6 +1,31 @@
 # ProtonMail Skill for OpenClaw
 
+[![CI](https://github.com/YOUR-USERNAME/openclaw-protonmail-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR-USERNAME/openclaw-protonmail-skill/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue)](https://www.typescriptlang.org/)
+
 Connect your OpenClaw agent to ProtonMail via Proton Mail Bridge.
+
+> ⚠️ **Status:** Early development (v0.1.0) — Core functionality in progress. Contributions welcome!
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Commands](#commands)
+- [Development](#development)
+- [Security](#security)
+- [Contributing](#contributing)
+- [License](#license)
+- [Support](#support)
+
+---
 
 ## Overview
 
