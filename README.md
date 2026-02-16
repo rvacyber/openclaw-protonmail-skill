@@ -5,7 +5,9 @@
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue)](https://www.typescriptlang.org/)
 
-Connect your OpenClaw agent to ProtonMail via Proton Mail Bridge.
+Connect your OpenClaw agent to ProtonMail via Proton Mail Bridge for secure email management.
+
+> ⚠️ **Beta Software**: This skill is in active development with limited production testing. Core functionality (read, send, search) is working, but edge cases and real-world usage patterns are still being validated. We're actively seeking feedback from early adopters to identify issues and improve reliability before a stable 1.0 release. Please report bugs and share your experience!
 
 ---
 
