@@ -44,13 +44,34 @@ Use ProtonMail for secure email via Proton Mail Bridge.
    - Copy the IMAP password (NOT your ProtonMail password)
    - Use `skills.entries.protonmail` (not `skills.protonmail`)
 
-## Common Commands
+## CLI Usage
+
+The skill provides a `protonmail` CLI tool:
+
+```bash
+# List inbox (most recent 10 emails)
+protonmail list-inbox --limit=10 [--unread]
+
+# Search emails
+protonmail search "from:alice@example.com" --limit=20
+
+# Read specific email
+protonmail read <uid>
+
+# Send email
+protonmail send --to=bob@example.com --subject="Meeting" --body="See you at 3pm"
+
+# Reply to email
+protonmail reply <uid> --body="Sounds good!"
+```
+
+## Common Requests
 
 - **List inbox:** "Check my ProtonMail inbox"
 - **Search emails:** "Search ProtonMail for emails from alice@example.com"
-- **Read email:** "Read ProtonMail email ID 12345"
+- **Read email:** "Read ProtonMail email UID 31"
 - **Send email:** "Send an email via ProtonMail to bob@example.com about the project"
-- **Reply:** "Reply to ProtonMail email ID 12345"
+- **Reply:** "Reply to ProtonMail email UID 31"
 
 ## How It Works
 
@@ -67,94 +88,6 @@ Use ProtonMail for secure email via Proton Mail Bridge.
 - ✅ Credentials stored locally only
 - ✅ No API keys or tokens — uses standard IMAP/SMTP
 - ✅ Bridge password is separate from your ProtonMail password
-
-## Tool Functions
-
-The skill provides these tools to OpenClaw:
-
-### protonmail-list-inbox
-List recent emails from inbox.
-
-**Parameters:**
-- `limit` (number, optional) — Max emails to return (default: 10)
-- `unreadOnly` (boolean, optional) — Only unread emails (default: false)
-
-**Example:**
-```json
-{
-  "tool": "protonmail-list-inbox",
-  "params": { "limit": 5, "unreadOnly": true }
-}
-```
-
-### protonmail-search
-Search emails by query.
-
-**Parameters:**
-- `query` (string, required) — Search query (sender, subject, body)
-- `limit` (number, optional) — Max results (default: 10)
-
-**Example:**
-```json
-{
-  "tool": "protonmail-search",
-  "params": { "query": "from:alice@example.com", "limit": 20 }
-}
-```
-
-### protonmail-read
-Read a specific email by ID.
-
-**Parameters:**
-- `messageId` (string, required) — Message ID or UID
-
-**Example:**
-```json
-{
-  "tool": "protonmail-read",
-  "params": { "messageId": "1234" }
-}
-```
-
-### protonmail-send
-Send a new email.
-
-**Parameters:**
-- `to` (string, required) — Recipient email
-- `subject` (string, required) — Email subject
-- `body` (string, required) — Email body (plain text)
-- `cc` (string, optional) — CC recipients
-- `bcc` (string, optional) — BCC recipients
-
-**Example:**
-```json
-{
-  "tool": "protonmail-send",
-  "params": {
-    "to": "alice@example.com",
-    "subject": "Meeting Follow-up",
-    "body": "Thanks for the meeting today. Next steps: ..."
-  }
-}
-```
-
-### protonmail-reply
-Reply to an email thread.
-
-**Parameters:**
-- `messageId` (string, required) — Original message ID
-- `body` (string, required) — Reply text
-
-**Example:**
-```json
-{
-  "tool": "protonmail-reply",
-  "params": {
-    "messageId": "1234",
-    "body": "Sounds good, I'll send the report by Friday."
-  }
-}
-```
 
 ## Troubleshooting
 

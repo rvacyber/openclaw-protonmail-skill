@@ -1,0 +1,124 @@
+#!/usr/bin/env node
+/**
+ * ProtonMail CLI for OpenClaw
+ * 
+ * Usage:
+ *   protonmail list-inbox [--limit=10] [--unread]
+ *   protonmail search <query> [--limit=10]
+ *   protonmail read <message-id>
+ *   protonmail send --to=<email> --subject=<subject> --body=<body> [--cc=<email>] [--bcc=<email>]
+ *   protonmail reply <message-id> --body=<body>
+ */
+
+const { ProtonMailSkill } = require('../dist/index.js');
+
+async function main() {
+  const args = process.argv.slice(2);
+  const command = args[0];
+
+  if (!command) {
+    console.error('Usage: protonmail <command> [options]');
+    console.error('Commands: list-inbox, search, read, send, reply');
+    process.exit(1);
+  }
+
+  const skill = new ProtonMailSkill();
+  await skill.initialize();
+
+  try {
+    switch (command) {
+      case 'list-inbox': {
+        const limit = parseInt(getArg(args, 'limit') || '10');
+        const unreadOnly = args.includes('--unread');
+        const emails = await skill.listInbox(limit, unreadOnly);
+        console.log(JSON.stringify(emails, null, 2));
+        break;
+      }
+
+      case 'search': {
+        const query = args[1];
+        if (!query) {
+          console.error('Error: search requires a query');
+          process.exit(1);
+        }
+        const limit = parseInt(getArg(args, 'limit') || '10');
+        const results = await skill.searchEmails(query, limit);
+        console.log(JSON.stringify(results, null, 2));
+        break;
+      }
+
+      case 'read': {
+        const messageId = args[1];
+        if (!messageId) {
+          console.error('Error: read requires a message ID');
+          process.exit(1);
+        }
+        const email = await skill.readEmail(messageId);
+        console.log(JSON.stringify({
+          from: email.from?.text,
+          to: email.to?.text,
+          subject: email.subject,
+          date: email.date,
+          text: email.text,
+          html: email.html,
+          attachments: email.attachments?.map(a => ({
+            filename: a.filename,
+            contentType: a.contentType,
+            size: a.size
+          }))
+        }, null, 2));
+        break;
+      }
+
+      case 'send': {
+        const to = getArg(args, 'to');
+        const subject = getArg(args, 'subject');
+        const body = getArg(args, 'body');
+        const cc = getArg(args, 'cc');
+        const bcc = getArg(args, 'bcc');
+
+        if (!to || !subject || !body) {
+          console.error('Error: send requires --to, --subject, and --body');
+          process.exit(1);
+        }
+
+        const result = await skill.sendEmail(to, subject, body, { cc, bcc });
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
+
+      case 'reply': {
+        const messageId = args[1];
+        const body = getArg(args, 'body');
+
+        if (!messageId || !body) {
+          console.error('Error: reply requires <message-id> and --body');
+          process.exit(1);
+        }
+
+        const result = await skill.replyToEmail(messageId, body);
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
+
+      default:
+        console.error(`Unknown command: ${command}`);
+        console.error('Commands: list-inbox, search, read, send, reply');
+        process.exit(1);
+    }
+
+    await skill.cleanup();
+  } catch (err) {
+    console.error('Error:', err.message);
+    await skill.cleanup();
+    process.exit(1);
+  }
+}
+
+function getArg(args, name) {
+  const prefix = `--${name}=`;
+  const arg = args.find(a => a.startsWith(prefix));
+  return arg ? arg.substring(prefix.length) : null;
+}
+
+main();
