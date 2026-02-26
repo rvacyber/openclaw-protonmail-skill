@@ -299,27 +299,27 @@ export class IMAPClient {
   private parseSearchQuery(query: string): any[] {
     const criteria: any[] = [];
 
-    // Simple parsing - extend this for more complex queries
-    if (query.includes('from:')) {
-      const match = query.match(/from:(\S+)/);
-      if (match) criteria.push(['FROM', match[1]]);
-    }
-    
-    if (query.includes('subject:')) {
-      const match = query.match(/subject:(\S+)/);
-      if (match) criteria.push(['SUBJECT', match[1]]);
-    }
-    
-    if (query.includes('body:')) {
-      const match = query.match(/body:(\S+)/);
-      if (match) criteria.push(['BODY', match[1]]);
+    const q = this.sanitizeSearchInput(query);
+
+    // Parse supported key:value filters with quoted or unquoted values
+    const filterRegex = /(from|subject|body):(?:"([^"]{1,200})"|([^\s]{1,200}))/gi;
+    let match: RegExpExecArray | null;
+    while ((match = filterRegex.exec(q)) !== null) {
+      const key = match[1].toLowerCase();
+      const rawValue = (match[2] || match[3] || '').trim();
+      const value = this.sanitizeSearchValue(rawValue);
+      if (!value) continue;
+
+      if (key === 'from') criteria.push(['FROM', value]);
+      if (key === 'subject') criteria.push(['SUBJECT', value]);
+      if (key === 'body') criteria.push(['BODY', value]);
     }
 
-    if (query.includes('newer_than:')) {
-      const match = query.match(/newer_than:(\d+)([dh])/);
-      if (match) {
-        const value = parseInt(match[1]);
-        const unit = match[2];
+    const dateMatch = q.match(/newer_than:(\d{1,3})([dh])/i);
+    if (dateMatch) {
+      const value = parseInt(dateMatch[1], 10);
+      const unit = dateMatch[2].toLowerCase();
+      if (value > 0 && value <= 365) {
         const date = new Date();
         if (unit === 'd') date.setDate(date.getDate() - value);
         else if (unit === 'h') date.setHours(date.getHours() - value);
@@ -327,12 +327,41 @@ export class IMAPClient {
       }
     }
 
-    // If no specific criteria, treat as subject search
+    // If no supported filters, do safe keyword subject search
     if (criteria.length === 0) {
-      criteria.push(['SUBJECT', query]);
+      const fallback = this.sanitizeSearchValue(q.replace(/(from|subject|body|newer_than):[^\s]+/gi, '').trim());
+      if (!fallback) {
+        throw new Error('Search query is empty or contains unsupported characters');
+      }
+      criteria.push(['SUBJECT', fallback]);
     }
 
     return criteria;
+  }
+
+  private sanitizeSearchInput(input: string): string {
+    const trimmed = (input || '').trim();
+    if (!trimmed) {
+      throw new Error('Search query is required');
+    }
+    if (trimmed.length > 200) {
+      throw new Error('Search query too long (max 200 chars)');
+    }
+    // Block CR/LF and control chars
+    if (/[\r\n\x00-\x1F\x7F]/.test(trimmed)) {
+      throw new Error('Search query contains invalid control characters');
+    }
+    return trimmed;
+  }
+
+  private sanitizeSearchValue(input: string): string {
+    const value = (input || '').trim();
+    if (!value) return '';
+    // Allowlist: common email/search characters only
+    if (!/^[a-zA-Z0-9@._+\-\s:]+$/.test(value)) {
+      throw new Error('Search query contains unsupported characters');
+    }
+    return value.slice(0, 200);
   }
 
   /**
