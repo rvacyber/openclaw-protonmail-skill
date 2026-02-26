@@ -9,6 +9,13 @@ Connect your OpenClaw agent to ProtonMail via Proton Mail Bridge for secure emai
 
 > ⚠️ **Beta Software**: This skill is in active development with limited production testing. Core functionality (read, send, search) is working, but edge cases and real-world usage patterns are still being validated. We're actively seeking feedback from early adopters to identify issues and improve reliability before a stable 1.0 release. Please report bugs and share your experience!
 
+> ✅ **Security Feedback Response (2026-02-26)**: We reviewed community scanner feedback and shipped hardening updates:
+> - Removed insecure TLS bypass config (`rejectUnauthorized: false`)
+> - Enforced localhost-only Bridge hosts (`127.0.0.1`, `localhost`, `::1`)
+> - Hardened IMAP query parsing with strict input validation/sanitization
+> 
+> See [CHANGELOG.md](./CHANGELOG.md) and PR #2 for full details.
+
 ---
 
 ## Table of Contents
@@ -20,6 +27,7 @@ Connect your OpenClaw agent to ProtonMail via Proton Mail Bridge for secure emai
 - [Usage](#usage)
 - [Commands](#commands)
 - [Development](#development)
+- [Security Feedback Response](#security-feedback-response)
 - [Security](#security)
 - [Contributing](#contributing)
 - [License](#license)
@@ -185,6 +193,23 @@ openclaw-protonmail-skill/
     └── config-example.json
 ```
 
+## Security Feedback Response
+
+We take security findings seriously and act on them quickly.
+
+On **2026-02-26**, we reviewed scanner feedback that flagged two potential risks and implemented fixes:
+
+1. **TLS Configuration Hardening**
+   - Removed insecure TLS override settings.
+   - Clarified and enforced localhost-only Bridge networking.
+
+2. **IMAP Search Input Hardening**
+   - Added input validation (length limits, control-character blocking).
+   - Added value allowlisting for parsed search filters.
+   - Limited parsing to supported filter operators only.
+
+If you spot additional concerns, open a GitHub issue with reproduction steps and we’ll triage promptly.
+
 ## Security
 
 - **Proton Bridge runs locally** — No third-party services involved
@@ -216,7 +241,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Credits
 
-Created by **Jim Staley** ([@YOUR-GITHUB-USERNAME](https://github.com/rvacyber)) for the OpenClaw community.
+Created by **Jim Staley** ([@rvacyber](https://github.com/rvacyber)) — contact: info@rvacyber.com.
 
 Inspired by the [gog](https://github.com/steipete/gog) skill for Google Workspace.
 
