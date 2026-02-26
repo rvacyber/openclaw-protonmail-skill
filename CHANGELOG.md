@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Security hardening following ClawHub scanner feedback:
+  - Removed insecure TLS bypass configuration
+  - Enforced localhost-only Bridge host policy
+  - Hardened IMAP search query parsing and input sanitization
+- README now includes a clear Security Feedback Response section with remediation details
+
 ### Added
 - Initial project structure
 - IMAP client foundation for reading ProtonMail emails
@@ -39,6 +46,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This is a pre-release version
 - Core IMAP/SMTP implementations are in progress
 - Not yet ready for production use
+
+## [0.1.1] - 2026-02-26
+
+### Security
+- Removed insecure TLS override behavior
+- Enforced localhost-only Bridge host policy
+- Hardened IMAP search query parsing/sanitization
+
+### Documentation
+- Added explicit Security Feedback Response details in README
+- Added security advisory (`docs/SECURITY-ADVISORY-2026-02-26.md`)
+- Added upgrade notice directing `0.1.0` users to patch release
 
 ## [0.1.0] - 2026-02-16
 

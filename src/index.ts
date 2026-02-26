@@ -100,13 +100,19 @@ export class ProtonMailSkill {
   constructor(config?: ProtonMailConfig) {
     const fullConfig = loadConfig(config);
     
+    // Security hardening: Proton Bridge must be localhost-only
+    const localHosts = new Set(['127.0.0.1', 'localhost', '::1']);
+    if (!localHosts.has(fullConfig.imapHost) || !localHosts.has(fullConfig.smtpHost)) {
+      throw new Error('Unsafe Bridge host configuration. IMAP/SMTP hosts must be localhost (127.0.0.1, localhost, or ::1).');
+    }
+
     const imapConfig = {
       user: fullConfig.account,
       password: fullConfig.bridgePassword,
       host: fullConfig.imapHost,
       port: fullConfig.imapPort,
       tls: false,
-      autotls: 'never' // Disable STARTTLS for now to test plain connection
+      autotls: 'never'
     };
 
     const smtpConfig = {
@@ -116,8 +122,7 @@ export class ProtonMailSkill {
       auth: {
         user: fullConfig.account,
         pass: fullConfig.bridgePassword
-      },
-      tls: { rejectUnauthorized: false }
+      }
     };
 
     this.imap = new IMAPClient(imapConfig);
