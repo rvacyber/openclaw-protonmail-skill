@@ -26,6 +26,7 @@ Connect your OpenClaw agent to ProtonMail via Proton Mail Bridge for secure emai
 - [Installation](#installation)
 - [Usage](#usage)
 - [Commands](#commands)
+- [Upgrade Notice (Security Patch)](#upgrade-notice-security-patch)
 - [Development](#development)
 - [Security Feedback Response](#security-feedback-response)
 - [Security](#security)
@@ -157,6 +158,15 @@ The skill provides these tool functions to OpenClaw:
 - `protonmail-read` — Read a specific email by ID
 - `protonmail-send` — Send a new email
 - `protonmail-reply` — Reply to an email thread
+
+
+## Upgrade Notice (Security Patch)
+
+If you installed version `0.1.0`, upgrade to `0.1.1` when released.
+
+- `0.1.0` contains security-hardening gaps identified by scanner feedback
+- `0.1.1` remediates these findings
+- Advisory details: [docs/SECURITY-ADVISORY-2026-02-26.md](./docs/SECURITY-ADVISORY-2026-02-26.md)
 
 ## Development
 

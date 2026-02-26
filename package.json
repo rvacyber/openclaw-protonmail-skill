@@ -1,8 +1,15 @@
 {
   "name": "openclaw-protonmail-skill",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "ProtonMail skill for OpenClaw via Proton Mail Bridge",
-  "keywords": ["openclaw", "protonmail", "email", "imap", "smtp", "skill"],
+  "keywords": [
+    "openclaw",
+    "protonmail",
+    "email",
+    "imap",
+    "smtp",
+    "skill"
+  ],
   "author": "Jim Staley",
   "license": "MIT",
   "repository": {
@@ -55,8 +62,12 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
-    "roots": ["<rootDir>/test"],
-    "testMatch": ["**/*.test.ts"],
+    "roots": [
+      "<rootDir>/test"
+    ],
+    "testMatch": [
+      "**/*.test.ts"
+    ],
     "collectCoverageFrom": [
       "src/**/*.ts",
       "!src/**/*.d.ts"

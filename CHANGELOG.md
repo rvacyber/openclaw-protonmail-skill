@@ -47,6 +47,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Core IMAP/SMTP implementations are in progress
 - Not yet ready for production use
 
+## [0.1.1] - 2026-02-26
+
+### Security
+- Removed insecure TLS override behavior
+- Enforced localhost-only Bridge host policy
+- Hardened IMAP search query parsing/sanitization
+
+### Documentation
+- Added explicit Security Feedback Response details in README
+- Added security advisory (`docs/SECURITY-ADVISORY-2026-02-26.md`)
+- Added upgrade notice directing `0.1.0` users to patch release
+
 ## [0.1.0] - 2026-02-16
 
 ### Initial Release
