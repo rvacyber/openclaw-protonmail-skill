@@ -32,7 +32,6 @@ function makeSmtp() {
     port: 1025,
     secure: false,
     auth: { user: 'bucky@pm.me', pass: 'bridge-pw' },
-    tls: { rejectUnauthorized: false },
   });
 }
 
