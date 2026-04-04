@@ -157,28 +157,44 @@ export class SMTPClient {
    * ```
    */
   async reply(originalMessage: any, body: string): Promise<any> {
-    // TODO: Full implementation
-    // 1. Extract Reply-To or fall back to From header
-    // 2. Build subject with "Re: " prefix (if missing)
-    // 3. Set In-Reply-To: <original message-id>
-    // 4. Set References: <thread message-ids>
-    // 5. Send via transporter
-    
-    // Stub implementation
-    const replyTo = originalMessage.replyTo?.[0]?.address || originalMessage.from?.[0]?.address;
-    const subject = originalMessage.subject?.startsWith('Re: ') 
-      ? originalMessage.subject 
-      : `Re: ${originalMessage.subject}`;
-    
+    // mailparser's ParsedMail shapes From and Reply-To as AddressObject,
+    // not as arrays. The address lives at .value[0].address — not [0].address.
+    //
+    // Wrong (was):  originalMessage.from?.[0]?.address
+    // Correct:      originalMessage.from?.value?.[0]?.address
+    const replyTo =
+      originalMessage.replyTo?.value?.[0]?.address ||
+      originalMessage.from?.value?.[0]?.address;
+
+    if (!replyTo) {
+      throw new Error(
+        'reply: could not determine recipient — original message has no From or Reply-To address'
+      );
+    }
+
+    const subject = originalMessage.subject?.startsWith('Re: ')
+      ? originalMessage.subject
+      : `Re: ${originalMessage.subject ?? ''}`;
+
+    // References should be a space-separated string per RFC 5322.
+    // mailparser may return it as string[] or string; normalise to string.
+    const existingRefs: string = Array.isArray(originalMessage.references)
+      ? originalMessage.references.join(' ')
+      : originalMessage.references ?? '';
+
+    const references = existingRefs
+      ? `${existingRefs} ${originalMessage.messageId}`
+      : originalMessage.messageId;
+
     const mailOptions: SendMailOptions = {
       from: this.config.auth.user,
       to: replyTo,
       subject,
       text: body,
       inReplyTo: originalMessage.messageId,
-      references: originalMessage.references || originalMessage.messageId
+      references,
     };
-    
+
     return this.transporter.sendMail(mailOptions);
   }
 }
