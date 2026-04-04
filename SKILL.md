@@ -1,3 +1,5 @@
+![RVA Cyber](../assets/branding/rva-cyber-logo-horizontal-v1.png)
+
 ---
 name: protonmail
 description: ProtonMail integration via Proton Mail Bridge for reading and sending encrypted emails.
@@ -5,9 +7,9 @@ homepage: https://github.com/rvacyber/openclaw-protonmail-skill
 metadata: {"openclaw":{"emoji":"🔐","requires":{"env":["PROTONMAIL_ACCOUNT","PROTONMAIL_BRIDGE_PASSWORD"]},"install":[{"id":"brew-bridge","kind":"brew","formula":"proton-mail-bridge","bins":[],"label":"Install Proton Mail Bridge (macOS)","cask":true}]}}
 ---
 
-# ProtonMail Skill
+# ProtonMail Skill (v1.0.0)
 
-Use ProtonMail for secure email via Proton Mail Bridge.
+Use ProtonMail for secure email via Proton Mail Bridge. Stable release — CLI tested against live Proton Mail Bridge.
 
 ## Setup (once)
 

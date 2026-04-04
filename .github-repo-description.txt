@@ -1,0 +1,1 @@
+OpenClaw skill for ProtonMail integration via Proton Mail Bridge (IMAP/SMTP). This is beta software with limited testing — we're actively seeking feedback to improve reliability and identify edge cases before a stable 1.0 release.

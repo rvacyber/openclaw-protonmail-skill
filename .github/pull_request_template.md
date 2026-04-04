@@ -1,3 +1,5 @@
+![RVA Cyber](../../assets/branding/rva-cyber-logo-horizontal-v1.png)
+
 # Pull Request
 
 ## Description

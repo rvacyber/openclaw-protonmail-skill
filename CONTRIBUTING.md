@@ -1,3 +1,5 @@
+![RVA Cyber](../assets/branding/rva-cyber-logo-horizontal-v1.png)
+
 # Contributing to ProtonMail Skill for OpenClaw
 
 Thank you for considering contributing! This skill is built for the OpenClaw community, and contributions are welcome.

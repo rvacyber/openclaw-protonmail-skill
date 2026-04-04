@@ -175,6 +175,7 @@ export class IMAPClient {
           fetch.on('message', (msg, seqno) => {
             let buffer = '';
             let uid = '';
+            let flags: string[] = [];
 
             msg.on('body', (stream) => {
               stream.on('data', (chunk) => {
@@ -184,6 +185,7 @@ export class IMAPClient {
 
             msg.once('attributes', (attrs) => {
               uid = attrs.uid.toString();
+              flags = (attrs.flags || []) as string[];
             });
 
             msg.once('end', () => {
@@ -193,7 +195,7 @@ export class IMAPClient {
                 from: Array.isArray(header.from) ? header.from[0] : header.from || '',
                 subject: Array.isArray(header.subject) ? header.subject[0] : header.subject || '',
                 date: new Date(Array.isArray(header.date) ? header.date[0] : header.date || ''),
-                flags: []
+                flags
               });
             });
           });
@@ -255,6 +257,7 @@ export class IMAPClient {
           fetch.on('message', (msg, seqno) => {
             let buffer = '';
             let uid = '';
+            let flags: string[] = [];
 
             msg.on('body', (stream) => {
               stream.on('data', (chunk) => {
@@ -264,6 +267,7 @@ export class IMAPClient {
 
             msg.once('attributes', (attrs) => {
               uid = attrs.uid.toString();
+              flags = (attrs.flags || []) as string[];
             });
 
             msg.once('end', () => {
@@ -273,7 +277,7 @@ export class IMAPClient {
                 from: Array.isArray(header.from) ? header.from[0] : header.from || '',
                 subject: Array.isArray(header.subject) ? header.subject[0] : header.subject || '',
                 date: new Date(Array.isArray(header.date) ? header.date[0] : header.date || ''),
-                flags: []
+                flags
               });
             });
           });
@@ -360,8 +364,10 @@ export class IMAPClient {
         }
 
         const fetch = this.imap.fetch(messageId, { bodies: '' });
+        let messageFound = false;
         
         fetch.on('message', (msg) => {
+          messageFound = true;
           msg.on('body', async (stream) => {
             try {
               const parsed = await simpleParser(stream as any);
@@ -373,6 +379,12 @@ export class IMAPClient {
         });
 
         fetch.once('error', reject);
+        
+        fetch.once('end', () => {
+          if (!messageFound) {
+            reject(new Error(`Message UID ${messageId} not found in INBOX`));
+          }
+        });
       });
     });
   }
