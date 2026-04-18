@@ -1,6 +1,6 @@
 {
   "name": "openclaw-protonmail-skill",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ProtonMail skill for OpenClaw via Proton Mail Bridge",
   "keywords": [
     "openclaw",

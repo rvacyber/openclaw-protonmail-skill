@@ -7,6 +7,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-04-18
+
+### Fixed
+- Restored `SKILL.md` frontmatter to the first line of the file so ClawHub/OpenClaw registry parsers can reliably detect required environment variables and install metadata.
+- Rebuilt `dist/` from the hardened TypeScript source so published runtime artifacts match the security fixes already present in `src/`.
+- Synchronized package version metadata after discovering `package.json` and `package-lock.json` were out of sync.
+
+### Changed
+- Updated skill version references to `1.0.1` for this patch release.
+- Documented this registry/parser compatibility patch release.
+
 ## [1.0.0] - 2026-04-04
 
 ### Fixed
