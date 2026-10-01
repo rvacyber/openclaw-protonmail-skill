@@ -1,3 +1,5 @@
+> **⚠️ No longer maintained.** This skill is no longer developed or supported by RVA Cyber. It is kept here for reference only; please don't rely on it for new deployments.
+
 # ProtonMail Skill for OpenClaw
 
 [![CI](https://github.com/rvacyber/openclaw-protonmail-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/rvacyber/openclaw-protonmail-skill/actions/workflows/ci.yml)
